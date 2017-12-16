@@ -1,2 +1,6 @@
 # PyCharm
 .idea/
+
+# Related with building package
+build/
+dist/

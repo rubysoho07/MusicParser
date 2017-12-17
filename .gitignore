@@ -4,3 +4,4 @@
 # Related with building package
 build/
 dist/
+MusicParser.egg-info/

@@ -77,23 +77,23 @@ class MusicParser(object):
 
     def get_parsed_data(self, input_url):
         """Get JSON data from music sites."""
-        pass
+        raise NotImplementedError
 
     def _get_artist(self, artist_data):
         """Get artist information"""
-        pass
+        raise NotImplementedError
 
     def _get_track(self, track_data, disk_num):
         """Get single track information from tag."""
-        pass
+        raise NotImplementedError
 
     def _get_track_list(self, track_row_list):
         """Get track list from 'tr' tags."""
-        pass
+        raise NotImplementedError
 
     def _parse_album(self, album_url):
         """Parse album data from music information site."""
-        pass
+        raise NotImplementedError
 
 
 class NaverMusicParser(MusicParser):
@@ -104,11 +104,11 @@ class NaverMusicParser(MusicParser):
         if artist_data.find('a'):
             artist_list = artist_data.find_all('a')
             if len(artist_list) == 1:
-                artist = artist_list[0].text
+                artist = artist_list[0].text.strip()
             else:
-                artist = ", ".join(item.text for item in artist_list)
+                artist = ", ".join(item.text.strip() for item in artist_list)
         else:
-            artist = artist_data.find('span').text
+            artist = artist_data.find('span').text.strip()
 
         return artist
 
@@ -117,7 +117,7 @@ class NaverMusicParser(MusicParser):
         track = dict()
         track['disk'] = disk_num
         track['track_num'] = int(track_data.find('td', class_='order').text)
-        track['track_title'] = track_data.find('td', class_='name').find('span', class_='ellipsis').text
+        track['track_title'] = track_data.find('td', class_='name').find('span', class_='ellipsis').text.strip()
         track['track_artist'] = track_data.find('td', class_='artist').text.strip()
         return track
 
@@ -144,7 +144,7 @@ class NaverMusicParser(MusicParser):
 
         album_data = dict()
         album_data['artist'] = self._get_artist(soup.find('dd', class_='artist'))
-        album_data['album_title'] = soup.find('div', class_='info_txt').h2.text
+        album_data['album_title'] = soup.find('div', class_='info_txt').h2.text.strip()
         album_data['album_cover'] = soup.find('div', class_='thumb').img['src']
         album_data['tracks'] = self._get_track_list(soup.find('tbody').find_all('tr'))
 
@@ -169,9 +169,9 @@ class BugsParser(MusicParser):
         if artist_data.find('a'):
             artist_list = artist_data.find('td').find_all('a')
             if len(artist_list) == 1:
-                artist = artist_list[0].text
+                artist = artist_list[0].text.strip()
             else:
-                artist = ", ".join(item.text for item in artist_list)
+                artist = ", ".join(item.text.strip() for item in artist_list)
         else:
             artist = artist_data.find('td').text.strip()
 
@@ -186,9 +186,9 @@ class BugsParser(MusicParser):
         track_title_data = track_data.find('p', class_='title')
 
         if track_title_data.find('a'):
-            track['track_title'] = track_title_data.a.text
+            track['track_title'] = track_title_data.a.text.strip()
         else:
-            track['track_title'] = track_title_data.span.text
+            track['track_title'] = track_title_data.span.text.strip()
 
         track_artist_tag = track_data.find('p', class_='artist')
         track_artists = track_artist_tag.find('a', class_='more')
@@ -202,9 +202,9 @@ class BugsParser(MusicParser):
                 else:
                     artist_list.append(onclick_text[i])
 
-            track['track_artist'] = ", ".join(artist_list)
+            track['track_artist'] = ", ".join(artist_list).strip()
         else:
-            track['track_artist'] = track_artist_tag.a.text
+            track['track_artist'] = track_artist_tag.a.text.strip()
 
         return track
 
@@ -259,9 +259,9 @@ class MelonParser(MusicParser):
         if artist_data.find('span'):
             artist_list = artist_data.find_all('span', class_=None)
             if len(artist_list) == 1:
-                artist = artist_list[0].text
+                artist = artist_list[0].text.strip()
             else:
-                artist = ", ".join(item.text for item in artist_list)
+                artist = ", ".join(item.text for item in artist_list).strip()
         else:
             artist = artist_data.find('dd').text.strip()
 
@@ -277,10 +277,10 @@ class MelonParser(MusicParser):
 
         if check_track_info:
             # Song you can play.
-            track['track_title'] = check_track_info.text
+            track['track_title'] = check_track_info.text.strip()
         else:
             # Song you can't play.
-            track['track_title'] = track_title_data.find('span', class_='disabled').text
+            track['track_title'] = track_title_data.find('span', class_='disabled').text.strip()
 
         # Get track artist
         track_artist_list = track_data.find('div', class_='rank02') \
@@ -288,10 +288,10 @@ class MelonParser(MusicParser):
                                       .find_all('a')
 
         if len(track_artist_list) == 1:
-            track['track_artist'] = track_artist_list[0].text
+            track['track_artist'] = track_artist_list[0].text.strip()
         else:
             # Support multiple artists for one song.
-            track['track_artist'] = ", ".join(item.text for item in track_artist_list)
+            track['track_artist'] = ", ".join(item.text for item in track_artist_list).strip()
 
         return track
 

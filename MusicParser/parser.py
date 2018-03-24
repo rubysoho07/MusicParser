@@ -4,7 +4,6 @@ Music Parser from music information sites.
 Author: Yungon Park
 """
 import re
-import json
 
 import requests
 from bs4 import BeautifulSoup
@@ -148,7 +147,7 @@ class NaverMusicParser(MusicParser):
         album_data['album_cover'] = soup.find('div', class_='thumb').img['src']
         album_data['tracks'] = self._get_track_list(soup.find('tbody').find_all('tr'))
 
-        return json.dumps(album_data, ensure_ascii=False)
+        return album_data
 
     def get_parsed_data(self, input_url):
         """Get parsed data and return JSON object."""
@@ -238,7 +237,7 @@ class BugsParser(MusicParser):
         table_row_list = soup.find('table', class_='trackList').find_all('tr')[1:]
         album_data['tracks'] = self._get_track_list(table_row_list)
 
-        return json.dumps(album_data, ensure_ascii=False)
+        return album_data
 
     def get_parsed_data(self, input_url):
         """Get parsed data and return JSON object."""
@@ -324,7 +323,7 @@ class MelonParser(MusicParser):
         album_data['tracks'] = self._get_track_list(soup.find('div', class_='d_song_list').
                                                     find_all('table'))
 
-        return json.dumps(album_data, ensure_ascii=False)
+        return album_data
 
     def get_parsed_data(self, input_url):
         """Get parsed data and return JSON object."""
@@ -401,7 +400,7 @@ class AllMusicParser(MusicParser):
         )['src']
         album_data['tracks'] = self._get_track_list(content.find_all('div', class_='disc'))
 
-        return json.dumps(album_data, ensure_ascii=False)
+        return album_data
 
     def get_parsed_data(self, input_url):
         """Get parsed data and return JSON object."""

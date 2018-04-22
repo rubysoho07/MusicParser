@@ -1,5 +1,4 @@
 import unittest
-import json
 
 from MusicParser.parser import MusicParser, AllMusicParser, BugsParser, NaverMusicParser, MelonParser
 
@@ -80,50 +79,42 @@ class TestMusicParser(unittest.TestCase):
     def test_check_naver_music(self):
         """Check parsing from Naver Music."""
         result1 = self.naver_music_parser.get_parsed_data(self.naver_music_example_1)
-        result1_json = json.loads(result1)
-        self.assertEqual(result1_json['artist'], "크라잉 넛, 노브레인")
-        self.assertEqual(result1_json['album_title'], "96")
+        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['album_title'], "96")
 
         result2 = self.naver_music_parser.get_parsed_data(self.naver_music_example_2)
-        result2_json = json.loads(result2)
-        self.assertEqual(result2_json['artist'], "Pink Floyd")
-        self.assertIn("The Wall", result2_json['album_title'])
+        self.assertEqual(result2['artist'], "Pink Floyd")
+        self.assertIn("The Wall", result2['album_title'])
 
     def test_check_melon(self):
         """Check parsing from Melon."""
         result1 = self.melon_parser.get_parsed_data(self.melon_example_1)
-        result1_json = json.loads(result1)
-        self.assertEqual(result1_json['artist'], "크라잉 넛, 노브레인")
-        self.assertEqual(result1_json['album_title'], "96")
+        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['album_title'], "96")
 
         result2 = self.melon_parser.get_parsed_data(self.melon_example_2)
-        result2_json = json.loads(result2)
-        self.assertEqual(result2_json['artist'], "Pink Floyd")
-        self.assertIn("The Wall", result2_json['album_title'])
+        self.assertEqual(result2['artist'], "Pink Floyd")
+        self.assertIn("The Wall", result2['album_title'])
 
     def test_check_bugs(self):
         """Check parsing from Bugs."""
         result1 = self.bugs_parser.get_parsed_data(self.bugs_example_1)
-        result1_json = json.loads(result1)
-        self.assertEqual(result1_json['artist'], "크라잉넛(Crying Nut), 노브레인(No Brain)")
-        self.assertEqual(result1_json['album_title'], "96")
+        self.assertEqual(result1['artist'], "크라잉넛(Crying Nut), 노브레인(No Brain)")
+        self.assertEqual(result1['album_title'], "96")
 
         result2 = self.bugs_parser.get_parsed_data(self.bugs_example_2)
-        result2_json = json.loads(result2)
-        self.assertEqual(result2_json['artist'], "Pink Floyd(핑크 플로이드)")
-        self.assertIn("The Wall", result2_json['album_title'])
+        self.assertEqual(result2['artist'], "Pink Floyd(핑크 플로이드)")
+        self.assertIn("The Wall", result2['album_title'])
 
     def test_check_allmusic(self):
         """Check parsing from AllMusic."""
         result3 = self.all_music_parser.get_parsed_data(self.all_music_example_3)
-        result3_json = json.loads(result3)
-        self.assertEqual(result3_json['artist'], "The Smashing Pumpkins")
-        self.assertEqual(result3_json['album_title'], "Mellon Collie and the Infinite Sadness")
+        self.assertEqual(result3['artist'], "The Smashing Pumpkins")
+        self.assertEqual(result3['album_title'], "Mellon Collie and the Infinite Sadness")
 
         result4 = self.all_music_parser.get_parsed_data(self.all_music_example_4)
-        result4_json = json.loads(result4)
-        self.assertEqual(result4_json['artist'], "Original Soundtrack")
-        self.assertEqual(result4_json['album_title'], "Judgment Night")
+        self.assertEqual(result4['artist'], "Original Soundtrack")
+        self.assertEqual(result4['album_title'], "Judgment Night")
 
     def test_get_parsed_data(self):
         """Check all procedures to parse information from music sites."""

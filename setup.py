@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='MusicParser',
-    version='0.0.2',
+    version='0.0.3',
     url='https://github.com/rubysoho07/MusicParser',
     author='Yungon Park',
     author_email='hahafree12@gmail.com',

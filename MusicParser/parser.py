@@ -150,7 +150,7 @@ class NaverMusicParser(MusicParser):
         return album_data
 
     def get_parsed_data(self, input_url):
-        """Get parsed data and return JSON object."""
+        """Get parsed data and return dict."""
         pattern = re.compile("music[.]naver[.]com")
 
         match = pattern.search(input_url)
@@ -240,7 +240,7 @@ class BugsParser(MusicParser):
         return album_data
 
     def get_parsed_data(self, input_url):
-        """Get parsed data and return JSON object."""
+        """Get parsed data and return dict."""
         pattern = re.compile("bugs[.]co[.]kr")
 
         match = pattern.search(input_url)
@@ -326,7 +326,7 @@ class MelonParser(MusicParser):
         return album_data
 
     def get_parsed_data(self, input_url):
-        """Get parsed data and return JSON object."""
+        """Get parsed data and return dict."""
         pattern = re.compile("melon[.]com")
 
         match = pattern.search(input_url)
@@ -403,7 +403,7 @@ class AllMusicParser(MusicParser):
         return album_data
 
     def get_parsed_data(self, input_url):
-        """Get parsed data and return JSON object."""
+        """Get parsed data and return dict."""
         pattern = re.compile("allmusic[.]com")
 
         match = pattern.search(input_url)

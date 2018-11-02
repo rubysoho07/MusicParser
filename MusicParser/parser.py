@@ -3,6 +3,7 @@ Music Parser from music information sites.
 
 Author: Yungon Park
 """
+import json
 import re
 
 import requests
@@ -74,8 +75,12 @@ class MusicParser(object):
 
         return None, None
 
-    def get_parsed_data(self, input_url):
-        """Get JSON data from music sites."""
+    def parse_to_dict(self, input_url):
+        """ Parse album information from music sites to dict. """
+        raise NotImplementedError
+
+    def parse_to_json(self, input_url):
+        """ Parse album information from music sites to JSON. """
         raise NotImplementedError
 
     def _get_artist(self, artist_data):
@@ -149,13 +154,23 @@ class NaverMusicParser(MusicParser):
 
         return album_data
 
-    def get_parsed_data(self, input_url):
+    def parse_to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("music[.]naver[.]com")
 
         match = pattern.search(input_url)
         if match:
             return self._parse_album(input_url)
+        else:
+            return None
+
+    def parse_to_json(self, input_url):
+        """Get parsed data and return JSON string."""
+        pattern = re.compile("music[.]naver[.]com")
+
+        match = pattern.search(input_url)
+        if match:
+            return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
             return None
 
@@ -239,13 +254,23 @@ class BugsParser(MusicParser):
 
         return album_data
 
-    def get_parsed_data(self, input_url):
+    def parse_to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("bugs[.]co[.]kr")
 
         match = pattern.search(input_url)
         if match:
             return self._parse_album(input_url)
+        else:
+            return None
+
+    def parse_to_json(self, input_url):
+        """Get parsed data and return JSON string."""
+        pattern = re.compile("bugs[.]co[.]kr")
+
+        match = pattern.search(input_url)
+        if match:
+            return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
             return None
 
@@ -325,13 +350,23 @@ class MelonParser(MusicParser):
 
         return album_data
 
-    def get_parsed_data(self, input_url):
+    def parse_to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("melon[.]com")
 
         match = pattern.search(input_url)
         if match:
             return self._parse_album(input_url)
+        else:
+            return None
+
+    def parse_to_json(self, input_url):
+        """Get parsed data and return JSON string."""
+        pattern = re.compile("melon[.]com")
+
+        match = pattern.search(input_url)
+        if match:
+            return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
             return None
 
@@ -402,12 +437,22 @@ class AllMusicParser(MusicParser):
 
         return album_data
 
-    def get_parsed_data(self, input_url):
+    def parse_to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("allmusic[.]com")
 
         match = pattern.search(input_url)
         if match:
             return self._parse_album(input_url)
+        else:
+            return None
+
+    def parse_to_json(self, input_url):
+        """Get parsed data and return JSON string."""
+        pattern = re.compile("allmusic[.]com")
+
+        match = pattern.search(input_url)
+        if match:
+            return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
             return None

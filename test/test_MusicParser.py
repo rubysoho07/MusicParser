@@ -1,4 +1,5 @@
 import unittest
+import json
 
 from MusicParser.parser import MusicParser, AllMusicParser, BugsParser, NaverMusicParser, MelonParser
 
@@ -76,56 +77,106 @@ class TestMusicParser(unittest.TestCase):
         error_result = MusicParser._check_album_cover_pattern("http://music.bugs.co.kr/album/450734")
         self.assertEqual(error_result, False)
 
-    def test_check_naver_music(self):
-        """Check parsing from Naver Music."""
-        result1 = self.naver_music_parser.get_parsed_data(self.naver_music_example_1)
+    def test_check_naver_music_as_dict(self):
+        """ Test to parse album information from Naver Music as a dict. """
+        result1 = self.naver_music_parser.parse_to_dict(self.naver_music_example_1)
         self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
         self.assertEqual(result1['album_title'], "96")
 
-        result2 = self.naver_music_parser.get_parsed_data(self.naver_music_example_2)
+        result2 = self.naver_music_parser.parse_to_dict(self.naver_music_example_2)
         self.assertEqual(result2['artist'], "Pink Floyd")
         self.assertIn("The Wall", result2['album_title'])
 
-    def test_check_melon(self):
-        """Check parsing from Melon."""
-        result1 = self.melon_parser.get_parsed_data(self.melon_example_1)
+    def test_check_naver_music_as_json(self):
+        """ Test to parse album information from Naver Music as a JSON string. """
+        json1 = self.naver_music_parser.parse_to_json(self.naver_music_example_1)
+
+        result1 = json.loads(json1, encoding='utf-8')
         self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
         self.assertEqual(result1['album_title'], "96")
 
-        result2 = self.melon_parser.get_parsed_data(self.melon_example_2)
+        json2 = self.naver_music_parser.parse_to_json(self.naver_music_example_2)
+
+        result2 = json.loads(json2, encoding='utf-8')
         self.assertEqual(result2['artist'], "Pink Floyd")
         self.assertIn("The Wall", result2['album_title'])
 
-    def test_check_bugs(self):
-        """Check parsing from Bugs."""
-        result1 = self.bugs_parser.get_parsed_data(self.bugs_example_1)
+    def test_check_melon_as_dict(self):
+        """ Test to parse album information from Melon as a dict. """
+        result1 = self.melon_parser.parse_to_dict(self.melon_example_1)
+        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['album_title'], "96")
+
+        result2 = self.melon_parser.parse_to_dict(self.melon_example_2)
+        self.assertEqual(result2['artist'], "Pink Floyd")
+        self.assertIn("The Wall", result2['album_title'])
+
+    def test_check_melon_as_json(self):
+        """ Test to parse album information from Melon as a JSON string. """
+        json1 = self.melon_parser.parse_to_json(self.melon_example_1)
+        result1 = json.loads(json1, encoding='utf-8')
+        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['album_title'], "96")
+
+        json2 = self.melon_parser.parse_to_json(self.melon_example_2)
+        result2 = json.loads(json2, encoding='utf-8')
+        self.assertEqual(result2['artist'], "Pink Floyd")
+        self.assertIn("The Wall", result2['album_title'])
+
+    def test_check_bugs_as_dict(self):
+        """ Test to parse album information from Bugs as a dict. """
+        result1 = self.bugs_parser.parse_to_dict(self.bugs_example_1)
         self.assertEqual(result1['artist'], "크라잉넛(Crying Nut), 노브레인(No Brain)")
         self.assertEqual(result1['album_title'], "96")
 
-        result2 = self.bugs_parser.get_parsed_data(self.bugs_example_2)
+        result2 = self.bugs_parser.parse_to_dict(self.bugs_example_2)
         self.assertEqual(result2['artist'], "Pink Floyd(핑크 플로이드)")
         self.assertIn("The Wall", result2['album_title'])
 
-    def test_check_allmusic(self):
-        """Check parsing from AllMusic."""
-        result3 = self.all_music_parser.get_parsed_data(self.all_music_example_3)
+    def test_check_bugs_as_json(self):
+        """ Test to parse album information from Bugs as a JSON string. """
+        json1 = self.bugs_parser.parse_to_json(self.bugs_example_1)
+        result1 = json.loads(json1, encoding='utf-8')
+        self.assertEqual(result1['artist'], "크라잉넛(Crying Nut), 노브레인(No Brain)")
+        self.assertEqual(result1['album_title'], "96")
+
+        json2 = self.bugs_parser.parse_to_json(self.bugs_example_2)
+        result2 = json.loads(json2, encoding='utf-8')
+        self.assertEqual(result2['artist'], "Pink Floyd(핑크 플로이드)")
+        self.assertIn("The Wall", result2['album_title'])
+
+    def test_check_allmusic_as_dict(self):
+        """ Test to parse album information from AllMusic as a dict. """
+        result3 = self.all_music_parser.parse_to_dict(self.all_music_example_3)
         self.assertEqual(result3['artist'], "The Smashing Pumpkins")
         self.assertEqual(result3['album_title'], "Mellon Collie and the Infinite Sadness")
 
-        result4 = self.all_music_parser.get_parsed_data(self.all_music_example_4)
+        result4 = self.all_music_parser.parse_to_dict(self.all_music_example_4)
+        self.assertEqual(result4['artist'], "Original Soundtrack")
+        self.assertEqual(result4['album_title'], "Judgment Night")
+
+    def test_check_allmusic_as_json(self):
+        """ Test to parse album information from AllMusic as a JSON string. """
+        json3 = self.all_music_parser.parse_to_json(self.all_music_example_3)
+        result3 = json.loads(json3, encoding='utf-8')
+        self.assertEqual(result3['artist'], "The Smashing Pumpkins")
+        self.assertEqual(result3['album_title'], "Mellon Collie and the Infinite Sadness")
+
+        json4 = self.all_music_parser.parse_to_json(self.all_music_example_4)
+        result4 = json.loads(json4, encoding='utf-8')
         self.assertEqual(result4['artist'], "Original Soundtrack")
         self.assertEqual(result4['album_title'], "Judgment Night")
 
     def test_get_parsed_data(self):
         """Check all procedures to parse information from music sites."""
-        result1 = self.naver_music_parser.get_parsed_data(self.naver_music_example_1)
+        result1 = self.naver_music_parser.parse_to_dict(self.naver_music_example_1)
         self.assertNotEqual(result1, None)
 
-        result2 = self.melon_parser.get_parsed_data(self.melon_example_1)
+        result2 = self.melon_parser.parse_to_dict(self.melon_example_1)
         self.assertNotEqual(result2, None)
 
-        result3 = self.bugs_parser.get_parsed_data(self.bugs_example_1)
+        result3 = self.bugs_parser.parse_to_dict(self.bugs_example_1)
         self.assertNotEqual(result3, None)
 
-        result4 = self.all_music_parser.get_parsed_data(self.all_music_example_3)
+        result4 = self.all_music_parser.parse_to_dict(self.all_music_example_3)
         self.assertNotEqual(result4, None)

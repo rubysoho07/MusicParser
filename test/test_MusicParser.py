@@ -30,12 +30,13 @@ class TestMusicParser(unittest.TestCase):
     melon_parser = None
     all_music_parser = None
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """Configuration before test."""
-        self.bugs_parser = BugsParser()
-        self.naver_music_parser = NaverMusicParser()
-        self.melon_parser = MelonParser()
-        self.all_music_parser = AllMusicParser()
+        cls.bugs_parser = BugsParser()
+        cls.naver_music_parser = NaverMusicParser()
+        cls.melon_parser = MelonParser()
+        cls.all_music_parser = AllMusicParser()
 
     def test_check_input(self):
         """Check input URL is valid and return correct URL and parser object to parse."""

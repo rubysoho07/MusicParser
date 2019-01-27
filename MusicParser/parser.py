@@ -73,15 +73,17 @@ class MusicParser(object):
         if match:
             return "http://www." + match.group(), AllMusicParser()
 
-        return None, None
+        raise InvalidURLError
 
-    def parse_to_dict(self, input_url):
+    def to_dict(self, input_url):
         """ Parse album information from music sites to dict. """
-        raise NotImplementedError
+        url, parser = self.check_input(input_url)
+        return parser.to_dict(url)
 
-    def parse_to_json(self, input_url):
+    def to_json(self, input_url):
         """ Parse album information from music sites to JSON. """
-        raise NotImplementedError
+        url, parser = self.check_input(input_url)
+        return parser.to_json(url)
 
     def _get_artist(self, artist_data):
         """Get artist information"""
@@ -154,7 +156,7 @@ class NaverMusicParser(MusicParser):
 
         return album_data
 
-    def parse_to_dict(self, input_url):
+    def to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("music[.]naver[.]com")
 
@@ -162,9 +164,9 @@ class NaverMusicParser(MusicParser):
         if match:
             return self._parse_album(input_url)
         else:
-            return None
+            raise InvalidURLError
 
-    def parse_to_json(self, input_url):
+    def to_json(self, input_url):
         """Get parsed data and return JSON string."""
         pattern = re.compile("music[.]naver[.]com")
 
@@ -172,7 +174,7 @@ class NaverMusicParser(MusicParser):
         if match:
             return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
-            return None
+            raise InvalidURLError
 
 
 class BugsParser(MusicParser):
@@ -254,7 +256,7 @@ class BugsParser(MusicParser):
 
         return album_data
 
-    def parse_to_dict(self, input_url):
+    def to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("bugs[.]co[.]kr")
 
@@ -262,9 +264,9 @@ class BugsParser(MusicParser):
         if match:
             return self._parse_album(input_url)
         else:
-            return None
+            raise InvalidURLError
 
-    def parse_to_json(self, input_url):
+    def to_json(self, input_url):
         """Get parsed data and return JSON string."""
         pattern = re.compile("bugs[.]co[.]kr")
 
@@ -272,7 +274,7 @@ class BugsParser(MusicParser):
         if match:
             return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
-            return None
+            raise InvalidURLError
 
 
 class MelonParser(MusicParser):
@@ -350,7 +352,7 @@ class MelonParser(MusicParser):
 
         return album_data
 
-    def parse_to_dict(self, input_url):
+    def to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("melon[.]com")
 
@@ -358,9 +360,9 @@ class MelonParser(MusicParser):
         if match:
             return self._parse_album(input_url)
         else:
-            return None
+            raise InvalidURLError
 
-    def parse_to_json(self, input_url):
+    def to_json(self, input_url):
         """Get parsed data and return JSON string."""
         pattern = re.compile("melon[.]com")
 
@@ -368,7 +370,7 @@ class MelonParser(MusicParser):
         if match:
             return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
-            return None
+            raise InvalidURLError
 
 
 class AllMusicParser(MusicParser):
@@ -437,7 +439,7 @@ class AllMusicParser(MusicParser):
 
         return album_data
 
-    def parse_to_dict(self, input_url):
+    def to_dict(self, input_url):
         """Get parsed data and return dict."""
         pattern = re.compile("allmusic[.]com")
 
@@ -445,9 +447,9 @@ class AllMusicParser(MusicParser):
         if match:
             return self._parse_album(input_url)
         else:
-            return None
+            raise InvalidURLError
 
-    def parse_to_json(self, input_url):
+    def to_json(self, input_url):
         """Get parsed data and return JSON string."""
         pattern = re.compile("allmusic[.]com")
 
@@ -455,4 +457,9 @@ class AllMusicParser(MusicParser):
         if match:
             return json.dumps(self._parse_album(input_url), ensure_ascii=False)
         else:
-            return None
+            raise InvalidURLError
+
+
+class InvalidURLError(Exception):
+    """ If an user try to parse album information from sites not supported by MusicParser, raise this error. """
+    pass

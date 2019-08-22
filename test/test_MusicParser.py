@@ -99,7 +99,7 @@ class TestMusicParser(unittest.TestCase):
     def test_naver_parser_to_dict(self):
         """ Test to parse album information from Naver Music as a dict. """
         result1 = self.naver_music_parser.to_dict(self.naver_music_example_1)
-        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['artist'], "크라잉넛(CRYING NUT), 노브레인")
         self.assertEqual(result1['album_title'], "96")
 
         result2 = self.naver_music_parser.to_dict(self.naver_music_example_2)
@@ -111,7 +111,7 @@ class TestMusicParser(unittest.TestCase):
         json1 = self.naver_music_parser.to_json(self.naver_music_example_1)
 
         result1 = json.loads(json1, encoding='utf-8')
-        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['artist'], "크라잉넛(CRYING NUT), 노브레인")
         self.assertEqual(result1['album_title'], "96")
 
         json2 = self.naver_music_parser.to_json(self.naver_music_example_2)
@@ -123,7 +123,7 @@ class TestMusicParser(unittest.TestCase):
     def test_melon_parser_to_dict(self):
         """ Test to parse album information from Melon as a dict. """
         result1 = self.melon_parser.to_dict(self.melon_example_1)
-        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['artist'], "크라잉넛 (CRYING NUT), 노브레인")
         self.assertEqual(result1['album_title'], "96")
 
         result2 = self.melon_parser.to_dict(self.melon_example_2)
@@ -134,7 +134,7 @@ class TestMusicParser(unittest.TestCase):
         """ Test to parse album information from Melon as a JSON string. """
         json1 = self.melon_parser.to_json(self.melon_example_1)
         result1 = json.loads(json1, encoding='utf-8')
-        self.assertEqual(result1['artist'], "크라잉 넛, 노브레인")
+        self.assertEqual(result1['artist'], "크라잉넛 (CRYING NUT), 노브레인")
         self.assertEqual(result1['album_title'], "96")
 
         json2 = self.melon_parser.to_json(self.melon_example_2)

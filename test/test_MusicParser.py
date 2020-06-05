@@ -74,26 +74,26 @@ class TestMusicParser(unittest.TestCase):
         self.assertEqual(dict_result['artist'], "크라잉넛(Crying Nut), 노브레인(No Brain)")
         self.assertEqual(dict_result['album_title'], "96")
 
-    def test_check_album_cover_pattern(self):
+    def testcheck_album_cover_pattern(self):
         """Check album cover patterns from music information sites."""
         naver_pattern = "http://musicmeta.phinf.naver.net/album/000/645/645112.jpg?type=r204Fll&v=20160623150347"
         melon_pattern = "http://cdnimg.melon.co.kr/cm/album/images/006/23/653/623653.jpg"
         bugs_pattern = "https://image.bugsm.co.kr/album/images/200/5712/571231.jpg"
         all_music_pattern = "https://cps-static.rovicorp.com/3/JPG_500/MI0002/416/MI0002416076.jpg?partner=allrovi.com"
 
-        naver_result = MusicParser._check_album_cover_pattern(naver_pattern)
+        naver_result = MusicParser.check_album_cover_pattern(naver_pattern)
         self.assertEqual(naver_result, True)
 
-        melon_result = MusicParser._check_album_cover_pattern(melon_pattern)
+        melon_result = MusicParser.check_album_cover_pattern(melon_pattern)
         self.assertEqual(melon_result, True)
 
-        bugs_result = MusicParser._check_album_cover_pattern(bugs_pattern)
+        bugs_result = MusicParser.check_album_cover_pattern(bugs_pattern)
         self.assertEqual(bugs_result, True)
 
-        all_music_result = MusicParser._check_album_cover_pattern(all_music_pattern)
+        all_music_result = MusicParser.check_album_cover_pattern(all_music_pattern)
         self.assertEqual(all_music_result, True)
 
-        error_result = MusicParser._check_album_cover_pattern("http://music.bugs.co.kr/album/450734")
+        error_result = MusicParser.check_album_cover_pattern("http://music.bugs.co.kr/album/450734")
         self.assertEqual(error_result, False)
 
     def test_naver_parser_to_dict(self):

@@ -14,7 +14,7 @@ class MusicParser(object):
     """Base parser class for parsing album information from music sites."""
 
     @staticmethod
-    def _check_album_cover_pattern(original_url):
+    def check_album_cover_pattern(original_url):
         """Check album cover file pattern."""
         naver_pattern = re.compile('http://musicmeta[.]phinf[.]naver[.]net/album/.*[.]jpg[?].*')
         melon_pattern = re.compile('http://cdnimg[.]melon[.]co[.]kr/cm/album/images/.*[.]jpg')

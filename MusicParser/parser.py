@@ -16,14 +16,14 @@ class MusicParser(object):
     @staticmethod
     def check_album_cover_pattern(original_url):
         """Check album cover file pattern."""
-        naver_pattern = re.compile('http://musicmeta[.]phinf[.]naver[.]net/album/.*[.]jpg[?].*')
+        # naver_pattern = re.compile('http://musicmeta[.]phinf[.]naver[.]net/album/.*[.]jpg[?].*')
         melon_pattern = re.compile('http://cdnimg[.]melon[.]co[.]kr/cm/album/images/.*[.]jpg')
         bugs_pattern = re.compile('https://image[.]bugsm[.]co[.]kr/album/images/.*[.]jpg')
         allmusic_pattern = re.compile('https://cps-static[.]rovicorp[.]com/.*[.]jpg.*')
 
-        result = naver_pattern.search(original_url)
-        if result:
-            return True
+        # result = naver_pattern.search(original_url)
+        # if result:
+        #     return True
 
         result = melon_pattern.search(original_url)
         if result:
@@ -53,25 +53,25 @@ class MusicParser(object):
     def check_input(url_input):
         """Check if input URL is valid and return normalized URL."""
         bugs_pattern = re.compile("bugs[.]co[.]kr/album/[0-9]{1,8}")
-        naver_music_pattern = re.compile("music[.]naver[.]com/album/index.nhn[?]albumId=[0-9]{1,8}")
+        # naver_music_pattern = re.compile("music[.]naver[.]com/album/index.nhn[?]albumId=[0-9]{1,8}")
         melon_pattern = re.compile("melon[.]com/album/detail[.]htm[?]albumId=[0-9]{1,8}")
         allmusic_pattern = re.compile("allmusic[.]com/album/.*mw[0-9]{10}")
 
         match = bugs_pattern.search(url_input)
         if match:
-            return "http://music." + match.group(), BugsParser()
+            return "https://music." + match.group(), BugsParser()
 
-        match = naver_music_pattern.search(url_input)
-        if match:
-            return "http://" + match.group(), NaverMusicParser()
+        # match = naver_music_pattern.search(url_input)
+        # if match:
+        #     return "https://" + match.group(), NaverMusicParser()
 
         match = melon_pattern.search(url_input)
         if match:
-            return "http://www." + match.group(), MelonParser()
+            return "https://www." + match.group(), MelonParser()
 
         match = allmusic_pattern.search(url_input)
         if match:
-            return "http://www." + match.group(), AllMusicParser()
+            return "https://www." + match.group(), AllMusicParser()
 
         raise InvalidURLError
 
@@ -102,79 +102,79 @@ class MusicParser(object):
         raise NotImplementedError
 
 
-class NaverMusicParser(MusicParser):
-    """ Parsing album information from Naver Music. """
-
-    def _get_artist(self, artist_data):
-        """Get artist information"""
-        if artist_data.find('a'):
-            artist_list = artist_data.find_all('a')
-            if len(artist_list) == 1:
-                artist = artist_list[0].text.strip()
-            else:
-                artist = ", ".join(item.text.strip() for item in artist_list)
-        else:
-            artist = artist_data.find('span').text.strip()
-
-        return artist
-
-    def _get_track(self, track_data, disk_num):
-        """Get single track information from tag."""
-        track = dict()
-        track['disk'] = disk_num
-        track['track_num'] = int(track_data.find('td', class_='order').text)
-        track['track_title'] = track_data.find('td', class_='name').find('span', class_='ellipsis').text.strip()
-        track['track_artist'] = track_data.find('td', class_='artist').text.strip()
-        return track
-
-    def _get_track_list(self, track_row_list):
-        """Get track list from 'tr' tags."""
-        disk_num = 1    # Set default disk number.
-
-        tracks = []
-        for row in track_row_list:
-            if row.find('td', class_='cd_divide'):
-                disk = row.find('td', class_='cd_divide')
-                disk_num = int(disk.text.split(' ')[1])
-            else:
-                if row.find('td', class_='order').text == "{TRACK_NUM}":
-                    continue
-
-                tracks.append(self._get_track(row, disk_num))
-
-        return tracks
-
-    def _parse_album(self, album_url):
-        """Parse album data from music information site."""
-        soup = self._get_original_data(album_url)
-
-        album_data = dict()
-        album_data['artist'] = self._get_artist(soup.find('dd', class_='artist'))
-        album_data['album_title'] = soup.find('div', class_='info_txt').h2.text.strip()
-        album_data['album_cover'] = soup.find('div', class_='thumb').img['src']
-        album_data['tracks'] = self._get_track_list(soup.find('tbody').find_all('tr'))
-
-        return album_data
-
-    def to_dict(self, input_url):
-        """Get parsed data and return dict."""
-        pattern = re.compile("music[.]naver[.]com")
-
-        match = pattern.search(input_url)
-        if match:
-            return self._parse_album(input_url)
-        else:
-            raise InvalidURLError
-
-    def to_json(self, input_url):
-        """Get parsed data and return JSON string."""
-        pattern = re.compile("music[.]naver[.]com")
-
-        match = pattern.search(input_url)
-        if match:
-            return json.dumps(self._parse_album(input_url), ensure_ascii=False)
-        else:
-            raise InvalidURLError
+# class NaverMusicParser(MusicParser):
+#     """ Parsing album information from Naver Music. """
+#
+#     def _get_artist(self, artist_data):
+#         """Get artist information"""
+#         if artist_data.find('a'):
+#             artist_list = artist_data.find_all('a')
+#             if len(artist_list) == 1:
+#                 artist = artist_list[0].text.strip()
+#             else:
+#                 artist = ", ".join(item.text.strip() for item in artist_list)
+#         else:
+#             artist = artist_data.find('span').text.strip()
+#
+#         return artist
+#
+#     def _get_track(self, track_data, disk_num):
+#         """Get single track information from tag."""
+#         track = dict()
+#         track['disk'] = disk_num
+#         track['track_num'] = int(track_data.find('td', class_='order').text)
+#         track['track_title'] = track_data.find('td', class_='name').find('span', class_='ellipsis').text.strip()
+#         track['track_artist'] = track_data.find('td', class_='artist').text.strip()
+#         return track
+#
+#     def _get_track_list(self, track_row_list):
+#         """Get track list from 'tr' tags."""
+#         disk_num = 1    # Set default disk number.
+#
+#         tracks = []
+#         for row in track_row_list:
+#             if row.find('td', class_='cd_divide'):
+#                 disk = row.find('td', class_='cd_divide')
+#                 disk_num = int(disk.text.split(' ')[1])
+#             else:
+#                 if row.find('td', class_='order').text == "{TRACK_NUM}":
+#                     continue
+#
+#                 tracks.append(self._get_track(row, disk_num))
+#
+#         return tracks
+#
+#     def _parse_album(self, album_url):
+#         """Parse album data from music information site."""
+#         soup = self._get_original_data(album_url)
+#
+#         album_data = dict()
+#         album_data['artist'] = self._get_artist(soup.find('dd', class_='artist'))
+#         album_data['album_title'] = soup.find('div', class_='info_txt').h2.text.strip()
+#         album_data['album_cover'] = soup.find('div', class_='thumb').img['src']
+#         album_data['tracks'] = self._get_track_list(soup.find('tbody').find_all('tr'))
+#
+#         return album_data
+#
+#     def to_dict(self, input_url):
+#         """Get parsed data and return dict."""
+#         pattern = re.compile("music[.]naver[.]com")
+#
+#         match = pattern.search(input_url)
+#         if match:
+#             return self._parse_album(input_url)
+#         else:
+#             raise InvalidURLError
+#
+#     def to_json(self, input_url):
+#         """Get parsed data and return JSON string."""
+#         pattern = re.compile("music[.]naver[.]com")
+#
+#         match = pattern.search(input_url)
+#         if match:
+#             return json.dumps(self._parse_album(input_url), ensure_ascii=False)
+#         else:
+#             raise InvalidURLError
 
 
 class BugsParser(MusicParser):

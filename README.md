@@ -6,7 +6,7 @@
 
 * Bugs
 * AllMusic
-* Naver Music
+* ~~Naver Music~~ (VIBE로 변경되어 미지원)
 * Melon
 
 ## 설치 방법
